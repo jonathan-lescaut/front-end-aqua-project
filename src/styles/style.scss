@@ -1,0 +1,249 @@
+@import "./setting";
+
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.form {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+}
+
+.form-title {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+}
+
+.form-button {
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+    border-radius: 5px;
+}
+
+.boxNav {
+    display: flex;
+    justify-content: space-around;
+
+}
+
+.boxWiki {
+    font-size: 3rem;
+    align-items: center;
+    padding: 15px;
+}
+
+.boxWikiLiving {
+    background-color: #759cd7;
+}
+
+.boxWikiLiving:hover {
+    background-color: #759cd789;
+}
+
+.boxWikiMaterial {
+    background-color: #a29a7e;
+}
+
+.boxWikiDecoration {
+    background-color: #0048b5
+}
+
+.boxNav a {
+    text-decoration: none;
+    color: black;
+}
+
+.bandHeader {
+    @include flexCenter;
+    background-color: #0048b5;
+    justify-content: space-between;
+
+    .btnUserConnect {
+        display: flex;
+    }
+
+    .btnUser {
+        @include flexCenter;
+        background-color: #759cd7;
+        border-radius: 50%;
+        width: 70px;
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #534319;
+
+
+    }
+
+    .titleBand {
+        font-size: 3rem;
+        font-weight: bold;
+    }
+}
+
+.btnLienNavUser {
+    @include flexCenter;
+    border-radius: 20px;
+    height: 70%;
+    font-size: 2rem;
+    padding: 5px 50px;
+    background: #759CD7;
+    color: #534319;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.formAddProject {
+    @include flexCenter;
+    justify-content: space-around;
+    margin-bottom: 20px;
+
+    .titleAddProject {
+        color: white;
+        font-size: 1.2rem;
+        font-weight: bold;
+        display: flex;
+
+        input {
+            border-radius: 10px;
+        }
+    }
+}
+
+.blocStartComplete {
+    display: flex;
+}
+
+.BlocChoixCuve {
+    display: flex;
+    flex-direction: column;
+
+    .blocBtnFirst {
+        display: flex;
+        justify-content: space-around
+    }
+}
+
+.titreChoixCuve {
+    background-color: white;
+    text-align: center;
+    font-size: 2rem;
+    color: #000000;
+    padding: 10px 0px 10px 0px;
+    width: 50%;
+    margin: auto;
+}
+
+.titleTwo {
+    margin-top: 20px;
+}
+
+
+.ChoixTypeCuve {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    margin-top: 30px;
+
+    .choixCuve {
+        margin-top: 15px;
+        font-size: 1.5rem;
+        padding: 15px;
+        background-color: white;
+        width: 200px;
+    }
+
+    .twoBtnChoix {
+        display: flex;
+        justify-content: space-around;
+
+    }
+
+    .choixCuve:hover {
+        background-color: $color1;
+        color: white;
+    }
+
+    .selected {
+        background-color: $color1;
+        color: white;
+    }
+}
+
+
+.blocStartLeft {
+    width: 40%;
+}
+
+.BlocInstruction {
+    background-color: white;
+    width: 40%;
+    border-radius: 10px;
+}
+
+.headerStart {
+    background-color: white;
+    padding: 10px;
+    font-size: 2rem;
+    text-align: center;
+    border-radius: 20px;
+    margin: 20px 20px
+}
+
+.show {
+    display: flex;
+    color: white;
+}
+
+.sousMenuDecoration {
+    justify-content: flex-start
+}
+
+.sousMenuMaterial {
+    justify-content: center
+}
+
+.sousMenuLiving {
+    justify-content: flex-end
+}
+
+.hide {
+    display: none;
+}
+
+.btnSousMenu {
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 1.5rem;
+    border-radius: 10px;
+    margin-right: 10px;
+}
+
+.btnSousMenuLiving {
+    background-color: $color5;
+}
+
+.btnSousMenuMaterial {
+    background-color: $color2;
+}
+
+.btnSousMenuDecoration {
+    background-color: $color3;
+}
