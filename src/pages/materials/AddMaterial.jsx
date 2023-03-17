@@ -21,6 +21,9 @@ const AddMaterial = () => {
   const handleChange = (event) => {
     setCategorieMaterialId(event.target.value);
   };
+  const changeHandler = (event) => {
+    setPictureMaterial(event.target.files[0]);
+  };
 
   useEffect(() => {
     getCategorieMaterials();
@@ -123,22 +126,14 @@ const AddMaterial = () => {
                       </Form.Group>
                     </Col>
                   </Row>
-
                   <Row>
                     <Col>
-                      <Form.Group controlId="picture">
-                        <Form.Label>image</Form.Label>
-                        <Form.Control
-                          type="text"
-                          value={picture_material}
-                          onChange={(event) => {
-                            setPictureMaterial(event.target.value);
-                          }}
-                        />
+                      <Form.Group controlId="PhotoMaterial" className="mb-3">
+                        <Form.Label>Photo du matériel</Form.Label>
+                        <Form.Control type="file" onChange={changeHandler} />
                       </Form.Group>
                     </Col>
                   </Row>
-
                   <Row>
                     <Col>
                       <Form.Group controlId="position">

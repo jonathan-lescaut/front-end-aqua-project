@@ -46,7 +46,12 @@ const Decorations = () => {
                 <td>{decoration.name_decoration}</td>
                 <td>{decoration.description_decoration}</td>
                 <td>{decoration.price_decoration}</td>
-                <td>{decoration.picture_decoration}</td>
+                <td>
+                  <img
+                    src={`http://localhost:8000/storage/uploads/${decoration.picture_decoration}`}
+                    width="100px"
+                  />
+                </td>
                 <td>{decoration.name_categorie_decoration}</td>
                 <td>
                   <Button

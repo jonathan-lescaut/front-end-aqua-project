@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 const MenuWiki = () => {
   const navigate = useNavigate();
+  const { project } = useParams();
   const [categorie_decorations, setCategorieDecorations] = useState([]);
   const [categorie_livings, setCategorieLivings] = useState([]);
   const [categorie_materials, setCategorieMaterials] = useState([]);
@@ -41,9 +42,6 @@ const MenuWiki = () => {
         setActiveButton(choice.id);
       }
     });
-    // const inputWikiDecoration = document.getElementById("#inputWikiDecoration");
-    // const inputWikiMaterial = document.getElementById("#inputWikiMaterial");
-    // const inputWikiLiving = document.getElementById("#inputWikiLiving");
   };
 
   useEffect(() => {
@@ -87,7 +85,7 @@ const MenuWiki = () => {
       >
         {categorie_decorations.map((categorie_decoration) => (
           <a
-            href="/"
+            href={`/projects/user/composition/projet/${project}/categorie_decoration/${categorie_decoration.id}`}
             className="btnSousMenu btnSousMenuDecoration"
             key={categorie_decoration.id}
             value={categorie_decoration.id}
@@ -104,7 +102,7 @@ const MenuWiki = () => {
       >
         {categorie_materials.map((categorie_material) => (
           <a
-            href="/"
+            href={`/projects/user/composition/projet/${project}/categorie_material/${categorie_material.id}`}
             className="btnSousMenu btnSousMenuMaterial"
             key={categorie_material.id}
             value={categorie_material.id}
@@ -121,7 +119,7 @@ const MenuWiki = () => {
       >
         {categorie_livings.map((categorie_living) => (
           <a
-            href="/"
+            href={`/projects/user/composition/projet/${project}/categorie_living/${categorie_living.id}`}
             className="btnSousMenu btnSousMenuLiving"
             key={categorie_living.id}
             value={categorie_living.id}

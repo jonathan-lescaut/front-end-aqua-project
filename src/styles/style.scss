@@ -247,3 +247,21 @@
 .btnSousMenuDecoration {
     background-color: $color3;
 }
+
+.product {
+    font-size: 2rem;
+    color: white;
+}
+
+.listeProduct {
+    display: flex;
+    justify-content: space-around
+}
+
+th {
+    color: white;
+}
+
+td {
+    color: white;
+}

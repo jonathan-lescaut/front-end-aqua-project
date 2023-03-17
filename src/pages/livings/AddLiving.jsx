@@ -13,6 +13,7 @@ const AddLiving = () => {
   const [name_living, setNameLiving] = useState("");
   const [description_living, setDescriptionLiving] = useState("");
   const [price_living, setPriceLiving] = useState("");
+  const [picture_living, setPictureLiving] = useState("");
   const [categorie_living_id, setCategorieLivingId] = useState("");
   const [categorie_livings, setCategorieLivings] = useState([]);
   const [validationError, setValidationError] = useState({});
@@ -20,7 +21,9 @@ const AddLiving = () => {
   const handleChange = (event) => {
     setCategorieLivingId(event.target.value);
   };
-
+  const changeHandler = (event) => {
+    setPictureLiving(event.target.files[0]);
+  };
   useEffect(() => {
     getCategorieLivings();
   }, []);
@@ -41,6 +44,7 @@ const AddLiving = () => {
     formData.append("name_living", name_living);
     formData.append("description_living", description_living);
     formData.append("price_living", price_living);
+    formData.append("picture_living", picture_living);
     formData.append("categorie_living_id", categorie_living_id);
     await axios
       .post(`http://localhost:8000/api/living`, formData)
@@ -118,6 +122,14 @@ const AddLiving = () => {
                             setPriceLiving(event.target.value);
                           }}
                         />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Form.Group controlId="PhotoLiving" className="mb-3">
+                        <Form.Label>Photo du vivant</Form.Label>
+                        <Form.Control type="file" onChange={changeHandler} />
                       </Form.Group>
                     </Col>
                   </Row>

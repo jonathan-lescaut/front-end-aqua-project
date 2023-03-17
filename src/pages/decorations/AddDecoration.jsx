@@ -21,7 +21,9 @@ const AddDecoration = () => {
   const handleChange = (event) => {
     setCategorieDecorationId(event.target.value);
   };
-
+  const changeHandler = (event) => {
+    setPictureDecoration(event.target.files[0]);
+  };
   useEffect(() => {
     getCategorieDecorations();
   }, []);
@@ -123,22 +125,14 @@ const AddDecoration = () => {
                       </Form.Group>
                     </Col>
                   </Row>
-
                   <Row>
                     <Col>
-                      <Form.Group controlId="picture">
-                        <Form.Label>image</Form.Label>
-                        <Form.Control
-                          type="text"
-                          value={picture_decoration}
-                          onChange={(event) => {
-                            setPictureDecoration(event.target.value);
-                          }}
-                        />
+                      <Form.Group controlId="PhotoDecoration" className="mb-3">
+                        <Form.Label>Photo de la décoration</Form.Label>
+                        <Form.Control type="file" onChange={changeHandler} />
                       </Form.Group>
                     </Col>
                   </Row>
-
                   <Row>
                     <Col>
                       <Form.Group controlId="position">

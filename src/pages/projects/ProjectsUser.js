@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Table from "react-bootstrap/Table";
 import { Button } from "react-bootstrap";
-import { useNavigate, useParams } from "react-router-dom";
-
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import MenuAdmin from "../../compoment/Layouts/MenuAdmin";
 import MenuUser from "../../compoment/Layouts/MenuUser";
@@ -62,6 +61,12 @@ const ProjectsUser = () => {
                     href={`http://localhost:3000/projects/edit/${project.id}`}
                   >
                     Editer
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    href={`http://localhost:3000/projects/user/composition/projet/${project.id}`}
+                  >
+                    Editer le projet
                   </Button>
                 </td>
               </tr>

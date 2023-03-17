@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./compoment/Auth/Login";
 import Register from "./compoment/Auth/Register";
 import Composition from "./compoment/Layouts/Project/Composition";
+import ListeProduct from "./compoment/Layouts/Project/ListeProduct";
 import Start from "./compoment/Layouts/Project/Start";
 import Home from "./Home";
 import AddCategorieDecoration from "./pages/categorie_decoration/AddCategorieDecorations";
@@ -44,8 +45,20 @@ function App() {
           <Route path="/projects/user/:user" element={<ProjectsUser />} />
           <Route path="/projects/user/new" element={<Start />} />
           <Route
-            path="/projects/user/composition/:project"
+            path="/projects/user/composition/projet/:project"
             element={<Composition />}
+          />
+          <Route
+            path="/projects/user/composition/projet/:project/categorie_living/:categorie"
+            element={<ListeProduct />}
+          />
+          <Route
+            path="/projects/user/composition/projet/:project/categorie_decoration/:categorie"
+            element={<ListeProduct />}
+          />
+          <Route
+            path="/projects/user/composition/projet/:project/categorie_material/:categorie"
+            element={<ListeProduct />}
           />
           <Route path="/livings/" element={<Livings />} />
           <Route path="/livings/add" element={<AddLiving />} />

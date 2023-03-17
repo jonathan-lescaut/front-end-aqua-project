@@ -15,7 +15,6 @@ const Materials = () => {
   const displayMaterials = async () => {
     await axios.get("http://localhost:8000/api/material").then((res) => {
       setMaterials(res.data.data);
-      console.log(res.data.data);
     });
   };
 
@@ -47,7 +46,12 @@ const Materials = () => {
                 <td>{material.name_material}</td>
                 <td>{material.description_material}</td>
                 <td>{material.price_material}</td>
-                <td>{material.picture_material}</td>
+                <td>
+                  <img
+                    src={`http://localhost:8000/storage/uploads/${material.picture_material}`}
+                    width="100px"
+                  />
+                </td>
                 <td>{material.name_categorie_material}</td>
                 <td>
                   <Button

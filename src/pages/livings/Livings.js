@@ -15,7 +15,6 @@ const Livings = () => {
   const displayLivings = async () => {
     await axios.get("http://localhost:8000/api/living").then((res) => {
       setLivings(res.data.data);
-      console.log(res.data.data);
     });
   };
 
@@ -33,6 +32,7 @@ const Livings = () => {
               <th>Nom</th>
               <th>Description</th>
               <th>Prix</th>
+              <th>Image</th>
               <th>Catégorie</th>
               <th>Actions</th>
             </tr>
@@ -43,6 +43,12 @@ const Livings = () => {
                 <td>{living.name_living}</td>
                 <td>{living.description_living}</td>
                 <td>{living.price_living}</td>
+                <td>
+                  <img
+                    src={`http://localhost:8000/storage/uploads/${living.picture_living}`}
+                    width="100px"
+                  />
+                </td>
                 <td>{living.name_categorie_living}</td>
                 <td>
                   <Button

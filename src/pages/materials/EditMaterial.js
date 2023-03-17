@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Form from "react-bootstrap/Form";
 import { Button } from "react-bootstrap";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import Login from "../../compoment/Auth/Login";
 import MenuAdmin from "../../compoment/Layouts/MenuAdmin";
 import MenuUser from "../../compoment/Layouts/MenuUser";
 
@@ -16,11 +15,14 @@ const EditMaterial = () => {
   const [description_material, setDescriptionMaterial] = useState("");
   const [price_material, setPriceMaterial] = useState("");
   const [picture_material, setPictureMaterial] = useState("");
-
   const [categorie_material_id, setCategorieMaterialId] = useState("");
   const [categorie_materials, setCategorieMaterials] = useState([]);
   const [validationError, setValidationError] = useState({});
+  const fileInputRef = useRef();
 
+  const handleFileChange = (e) => {
+    setPictureMaterial(e.target.files[0]); // le fichier d'image en bdd
+  };
   const handleChange = (event) => {
     setCategorieMaterialId(event.target.value);
   };
@@ -47,8 +49,6 @@ const EditMaterial = () => {
         setPriceMaterial(res.data.price_material);
         setPictureMaterial(res.data.picture_material);
         setCategorieMaterialId(res.data.categorie_material_id);
-
-        console.log(res.data);
       })
       .catch((error) => {
         console.log(error);
@@ -59,13 +59,16 @@ const EditMaterial = () => {
   const updateMaterial = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("_method", "PATCH");
+    formData.append("_method", "POST");
     formData.append("name_material", name_material);
     formData.append("description_material", description_material);
     formData.append("price_material", price_material);
     formData.append("picture_material", picture_material);
-
     formData.append("categorie_material_id", categorie_material_id);
+
+    if (picture_material !== null) {
+      formData.append("picture_material", picture_material);
+    }
 
     await axios
       .post(`http://localhost:8000/api/material/${material}`, formData)
@@ -76,7 +79,6 @@ const EditMaterial = () => {
         }
       });
   };
-  console.log(categorie_material_id);
   return (
     <div>
       <MenuUser />
@@ -146,22 +148,19 @@ const EditMaterial = () => {
                       </Form.Group>
                     </Col>
                   </Row>
-
                   <Row>
                     <Col>
-                      <Form.Group controlId="Name">
-                        <Form.Label>Image</Form.Label>
+                      <Form.Group controlId="formFile">
+                        <Form.Label>Image Matériel</Form.Label>
                         <Form.Control
-                          type="text"
-                          value={picture_material}
-                          onChange={(event) => {
-                            setPictureMaterial(event.target.value);
-                          }}
+                          type="file"
+                          onChange={handleFileChange}
+                          ref={fileInputRef}
                         />
                       </Form.Group>
                     </Col>
                   </Row>
-
+                  -
                   <Row>
                     <Col>
                       <Form.Group controlId="position">
@@ -184,7 +183,6 @@ const EditMaterial = () => {
                       </Form.Group>
                     </Col>
                   </Row>
-
                   <Button
                     variant="primary"
                     className="mt-2"

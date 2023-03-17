@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Form from "react-bootstrap/Form";
 import { Button } from "react-bootstrap";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import Login from "../../compoment/Auth/Login";
 import MenuAdmin from "../../compoment/Layouts/MenuAdmin";
 import MenuUser from "../../compoment/Layouts/MenuUser";
 
@@ -15,10 +14,15 @@ const EditLiving = () => {
   const [name_living, setNameLiving] = useState("");
   const [description_living, setDescriptionLiving] = useState("");
   const [price_living, setPriceLiving] = useState("");
+  const [picture_living, setPictureLiving] = useState("");
   const [categorie_living_id, setCategorieLivingId] = useState("");
   const [categorie_livings, setCategorieLivings] = useState([]);
   const [validationError, setValidationError] = useState({});
+  const fileInputRef = useRef();
 
+  const handleFileChange = (e) => {
+    setPictureLiving(e.target.files[0]); // le fichier d'image en bdd
+  };
   const handleChange = (event) => {
     setCategorieLivingId(event.target.value);
   };
@@ -43,9 +47,8 @@ const EditLiving = () => {
         setNameLiving(res.data.name_living);
         setDescriptionLiving(res.data.description_living);
         setPriceLiving(res.data.price_living);
+        setPictureLiving(res.data.picture_living);
         setCategorieLivingId(res.data.categorie_living_id);
-
-        console.log(res.data);
       })
       .catch((error) => {
         console.log(error);
@@ -56,11 +59,16 @@ const EditLiving = () => {
   const updateLiving = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("_method", "PATCH");
+    formData.append("_method", "POST");
     formData.append("name_living", name_living);
     formData.append("description_living", description_living);
     formData.append("price_living", price_living);
+    formData.append("picture_living", picture_living);
     formData.append("categorie_living_id", categorie_living_id);
+
+    if (picture_living !== null) {
+      formData.append("picture_living", picture_living);
+    }
 
     await axios
       .post(`http://localhost:8000/api/living/${living}`, formData)
@@ -71,7 +79,6 @@ const EditLiving = () => {
         }
       });
   };
-  console.log(categorie_living_id);
   return (
     <div>
       <MenuUser />
@@ -137,6 +144,18 @@ const EditLiving = () => {
                           onChange={(event) => {
                             setPriceLiving(event.target.value);
                           }}
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Form.Group controlId="formFile">
+                        <Form.Label>Image Vivant</Form.Label>
+                        <Form.Control
+                          type="file"
+                          onChange={handleFileChange}
+                          ref={fileInputRef}
                         />
                       </Form.Group>
                     </Col>

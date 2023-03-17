@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Form from "react-bootstrap/Form";
 import { Button } from "react-bootstrap";
 import Row from "react-bootstrap/Row";
@@ -16,10 +16,14 @@ const EditDecoration = () => {
   const [description_decoration, setDescriptionDecoration] = useState("");
   const [price_decoration, setPriceDecoration] = useState("");
   const [picture_decoration, setPictureDecoration] = useState("");
-
   const [categorie_decoration_id, setCategorieDecorationId] = useState("");
   const [categorie_decorations, setCategorieDecorations] = useState([]);
   const [validationError, setValidationError] = useState({});
+  const fileInputRef = useRef();
+
+  const handleFileChange = (e) => {
+    setPictureDecoration(e.target.files[0]); // le fichier d'image en bdd
+  };
 
   const handleChange = (event) => {
     setCategorieDecorationId(event.target.value);
@@ -47,8 +51,6 @@ const EditDecoration = () => {
         setPriceDecoration(res.data.price_decoration);
         setPictureDecoration(res.data.picture_decoration);
         setCategorieDecorationId(res.data.categorie_decoration_id);
-
-        console.log(res.data);
       })
       .catch((error) => {
         console.log(error);
@@ -59,13 +61,16 @@ const EditDecoration = () => {
   const updateDecoration = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("_method", "PATCH");
+    formData.append("_method", "POST");
     formData.append("name_decoration", name_decoration);
     formData.append("description_decoration", description_decoration);
     formData.append("price_decoration", price_decoration);
     formData.append("picture_decoration", picture_decoration);
-
     formData.append("categorie_decoration_id", categorie_decoration_id);
+
+    if (picture_decoration !== null) {
+      formData.append("picture_decoration", picture_decoration);
+    }
 
     await axios
       .post(`http://localhost:8000/api/decoration/${decoration}`, formData)
@@ -76,7 +81,6 @@ const EditDecoration = () => {
         }
       });
   };
-  console.log(categorie_decoration_id);
   return (
     <div>
       <MenuUser />
@@ -149,19 +153,16 @@ const EditDecoration = () => {
 
                   <Row>
                     <Col>
-                      <Form.Group controlId="Name">
-                        <Form.Label>Image</Form.Label>
+                      <Form.Group controlId="formFile">
+                        <Form.Label>Image décoration</Form.Label>
                         <Form.Control
-                          type="text"
-                          value={picture_decoration}
-                          onChange={(event) => {
-                            setPictureDecoration(event.target.value);
-                          }}
+                          type="file"
+                          onChange={handleFileChange}
+                          ref={fileInputRef}
                         />
                       </Form.Group>
                     </Col>
                   </Row>
-
                   <Row>
                     <Col>
                       <Form.Group controlId="position">
