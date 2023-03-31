@@ -28,6 +28,7 @@ import AddProject from "./pages/projects/AddProject";
 import EditProject from "./pages/projects/EditProject";
 import Projects from "./pages/projects/Projects";
 import ProjectsUser from "./pages/projects/ProjectsUser";
+import ProjectView from "./pages/projects/Views/ProjectView";
 import EditUser from "./pages/users/EditUser";
 import Users from "./pages/users/User";
 
@@ -43,9 +44,11 @@ function App() {
           <Route path="/projects/add" element={<AddProject />} />
           <Route path="/projects/edit/:project" element={<EditProject />} />
           <Route path="/projects/user/:user" element={<ProjectsUser />} />
+          <Route path="/project/view/:project" element={<ProjectView />} />
+
           <Route path="/projects/user/new" element={<Start />} />
           <Route
-            path="/projects/user/composition/projet/:project"
+            path="/projects/user/composition/project/:project"
             element={<Composition />}
           />
           <Route

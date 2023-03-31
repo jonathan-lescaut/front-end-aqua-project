@@ -64,9 +64,15 @@ const ProjectsUser = () => {
                   </Button>
                   <Button
                     variant="secondary"
-                    href={`http://localhost:3000/projects/user/composition/projet/${project.id}`}
+                    href={`http://localhost:3000/projects/user/composition/project/${project.id}`}
                   >
                     Editer le projet
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    href={`http://localhost:3000/project/view/${project.id}`}
+                  >
+                    Voir le projet
                   </Button>
                 </td>
               </tr>

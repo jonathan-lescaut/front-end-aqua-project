@@ -78,7 +78,8 @@ const Start = () => {
                 .then((response) => {
                   console.log(response.data.data.id);
                   window.location =
-                    "/projects/user/composition/" + response.data.data.id;
+                    "/projects/user/composition/project/" +
+                    response.data.data.id;
                 })
                 .catch((error) => {
                   console.error(error);

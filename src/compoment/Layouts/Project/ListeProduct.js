@@ -3,6 +3,9 @@ import MenuUser from "../MenuUser";
 import axios from "axios";
 import MenuWiki from "../MenuWiki";
 import { useParams } from "react-router-dom";
+import Living from "../Product/Living";
+import Material from "../Product/Material";
+import Decoration from "../Product/Decoration";
 
 const ListeProduct = () => {
   const { categorie } = useParams();
@@ -37,19 +40,27 @@ const ListeProduct = () => {
         });
     }
   };
+  // Filtrer les produits par catégorie
+  const filteredProducts = {
+    decoration: products.filter((product) => product.name_decoration),
+    material: products.filter((product) => product.name_material),
+    living: products.filter((product) => product.name_living),
+  };
 
   return (
     <>
       <MenuUser />
       <MenuWiki />
       <div className="listeProduct">
-        {products.map((product) => (
-          <div className="product" key={product.id} value={product.id}>
-            {typeCategorie === "decoration" && product.name_decoration}
-            {typeCategorie === "material" && product.name_material}
-            {typeCategorie === "living" && product.name_living}
-          </div>
-        ))}
+        {typeCategorie === "living" && (
+          <Living products={filteredProducts.living} />
+        )}
+        {typeCategorie === "material" && (
+          <Material products={filteredProducts.material} />
+        )}
+        {typeCategorie === "decoration" && (
+          <Decoration products={filteredProducts.decoration} />
+        )}
       </div>
     </>
   );
