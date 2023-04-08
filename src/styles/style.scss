@@ -282,4 +282,148 @@ td {
     img {
         width: 100%;
     }
+
+    .qtyProduct {
+        background-color: #fff;
+        width: 100px;
+        border-radius: 10px;
+    }
+}
+
+.titreCatViewProject {
+    background-color: #ffffff8f;
+    text-transform: capitalize;
+    padding: 5px;
+    margin-bottom: 0px;
+    margin-top: 5px;
+
+
+}
+
+.titleViewProject {
+    background-color: #ffffffc4;
+    padding: 5px;
+    font-size: 2.5rem;
+    text-align: center;
+}
+
+.pageViewProject {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.blocRightView {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    align-items: flex-end;
+
+    .instructionViewProject {
+        background-color: #ffffffc4;
+        width: 90%;
+        height: 400px;
+        margin-right: 65px;
+    }
+
+    .btnSuiteView {
+        color: white;
+        background-color: $color1;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: bold;
+        padding: 5px 20px 5px 20px;
+        width: 50%;
+        margin-top: 20px;
+        margin-right: 65px;
+    }
+}
+
+.addProductPageView {
+    margin-left: 65px;
+    width: 50%;
+    margin-right: 65px;
+}
+
+.blocAddView {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btnAddProductView {
+    color: white;
+    background-color: $color1;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 5px 20px 5px 20px;
+}
+
+.btnAddProductView:hover {
+    text-decoration: none !important;
+    color: white;
+    border: solid 4px $color1;
+    font-size: 1.1rem;
+    transition: 50ms;
+}
+
+.nameProductViewProject {
+    background-color: #ffffff49;
+    padding: 5px;
+    font-weight: bold;
+    width: 250px;
+    text-align: center;
+    margin-top: 5px;
+}
+
+.blocProductView {
+    display: flex;
+}
+
+.lienProductWiki {
+    background-color: #ffffff4b;
+    border-radius: 30px;
+    width: 30px;
+    text-align: center;
+    font-weight: bolder;
+    margin-left: 3px;
+    margin-right: 3px;
+    padding: 5px;
+    margin-top: 5px;
+}
+
+.inputQty {
+    width: 30px;
+}
+
+.blocViewQty {
+    display: flex;
+    margin-left: 50px;
+    margin-top: 5px;
+}
+
+.inputAjustQty {
+    background-color: #2512ff;
+    color: white;
+    font-weight: bold;
+    width: 30px;
+    text-align: center;
+    padding: 2px;
+    font-size: 1.2rem;
+}
+
+.qtyProductViewProject {
+    background-color: #ffffff84;
+    font-weight: bold;
+    width: 30px;
+    text-align: center;
+    padding: 5px;
+}
+
+.deleteProductView {
+    margin-top: 5px;
+    background-color: #ffffff49;
+    font-weight: bold;
+    border: solid 2px #00000039;
 }
