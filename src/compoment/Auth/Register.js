@@ -59,6 +59,7 @@ const Register = () => {
           <button type="submit" className="form-button">
             Register
           </button>
+          <a href="/">Retour</a>
         </div>
       </form>
     </div>

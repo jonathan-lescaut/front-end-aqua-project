@@ -15,27 +15,28 @@ const MenuAdmin = () => {
 
   useEffect(() => {
     const displayUsers = async () => {
-      if (localStorage.token) {
-        await axios
-          .get("http://127.0.0.1:8000/api/current-user", {
-            headers: {
-              Authorization: "Bearer " + localStorage.token,
-            },
-          })
-          .then((res) => {
-            setUser(res.data);
-            setIsLoggedIn(true);
-            setIsAdmin(res.data.roles.includes("ROLE_ADMIN"));
-          })
-          .catch((err) => {
-            console.log(err);
-            setIsLoggedIn(false);
-            setIsAdmin(false);
-          });
-      } else {
-        setIsLoggedIn(false);
-        setIsAdmin(false);
-      }
+      try {
+        if (localStorage.token) {
+          await axios
+            .get("http://127.0.0.1:8000/api/current-user", {
+              headers: {
+                Authorization: "Bearer " + localStorage.token,
+              },
+            })
+            .then((res) => {
+              setUser(res.data);
+              setIsLoggedIn(true);
+              setIsAdmin(res.data.roles.includes("ROLE_ADMIN"));
+            })
+            .catch((err) => {
+              setIsLoggedIn(false);
+              setIsAdmin(false);
+            });
+        } else {
+          setIsLoggedIn(false);
+          setIsAdmin(false);
+        }
+      } catch (error) {}
     };
 
     displayUsers();

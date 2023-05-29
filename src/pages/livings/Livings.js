@@ -19,20 +19,28 @@ const Livings = () => {
   };
 
   const deleteLiving = (id) => {
-    axios.delete(`http://localhost:8000/api/living/${id}`).then(displayLivings);
+    axios
+      .delete(`http://localhost:8000/api/living/${id}`, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      })
+      .then(displayLivings);
   };
+
   return (
     <div>
       <MenuUser />
       <MenuAdmin />
-      <div className="container mt-5">
-        <Table striped bordered hover>
+      <div className="listeAdmin">
+        <table>
           <thead>
-            <tr>
+            <tr className="titleListAdmin">
               <th>Nom</th>
               <th>Description</th>
               <th>Prix</th>
               <th>Image</th>
+              <th>Quantité</th>
               <th>Catégorie</th>
               <th>Actions</th>
             </tr>
@@ -49,6 +57,7 @@ const Livings = () => {
                     width="100px"
                   />
                 </td>
+                <td>{living.quantity_editable_living === 1 ? "oui" : "non"}</td>
                 <td>{living.name_categorie_living}</td>
                 <td>
                   <Button
@@ -69,7 +78,7 @@ const Livings = () => {
               </tr>
             ))}
           </tbody>
-        </Table>
+        </table>
       </div>
     </div>
   );

@@ -13,10 +13,18 @@ const AddMaterial = () => {
   const [name_material, setNameMaterial] = useState("");
   const [description_material, setDescriptionMaterial] = useState("");
   const [price_material, setPriceMaterial] = useState("");
+  const [liter, setLiter] = useState("");
+  const [content_kit, setContentKit] = useState("");
+  const [quantity_editable_material, setQuantityEditableMaterial] =
+    useState(true);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [categorie_included_kit, setCategorieIncludedKit] = useState([]);
+  const [kit, setKit] = useState(false);
   const [picture_material, setPictureMaterial] = useState("");
   const [categorie_material_id, setCategorieMaterialId] = useState("");
   const [categorie_materials, setCategorieMaterials] = useState([]);
   const [validationError, setValidationError] = useState({});
+  const [showTextArea, setShowTextArea] = useState(false);
 
   const handleChange = (event) => {
     setCategorieMaterialId(event.target.value);
@@ -24,9 +32,17 @@ const AddMaterial = () => {
   const changeHandler = (event) => {
     setPictureMaterial(event.target.files[0]);
   };
+  const handleChangeSwitchQty = () => {
+    setQuantityEditableMaterial(!quantity_editable_material);
+  };
+  const handleChangeSwitchKit = () => {
+    setKit(!kit);
+    setShowTextArea(!kit);
+  };
 
   useEffect(() => {
     getCategorieMaterials();
+    getCategorieIncludeKit();
   }, []);
 
   //Méthode pour récupérer les caté
@@ -35,6 +51,38 @@ const AddMaterial = () => {
       .get("http://127.0.0.1:8000/api/categorie_material")
       .then((res) => {
         setCategorieMaterials(res.data);
+      });
+  };
+  const handleCategoryChange = (event) => {
+    const categoryId = event.target.value;
+    const isChecked = event.target.checked;
+
+    if (isChecked) {
+      setSelectedCategories((prevSelectedCategories) => {
+        // Utilisez la valeur mise à jour de selectedCategories ici
+        const updatedCategories = [...prevSelectedCategories, categoryId];
+        return updatedCategories;
+      });
+    } else {
+      // Retirer la catégorie sélectionnée
+      setSelectedCategories((prevSelectedCategories) => {
+        const updatedCategories = prevSelectedCategories.filter(
+          (id) => id !== categoryId
+        );
+        return updatedCategories;
+      });
+    }
+  };
+
+  const getCategorieIncludeKit = async () => {
+    await axios
+      .get(`http://localhost:8000/api/material/categoriekit`)
+      .then((res) => {
+        setCategorieIncludedKit(res.data.data);
+        console.log(res.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
 
@@ -47,8 +95,24 @@ const AddMaterial = () => {
     formData.append("price_material", price_material);
     formData.append("picture_material", picture_material);
     formData.append("categorie_material_id", categorie_material_id);
+    formData.append("liter", liter);
+    formData.append("content_kit", JSON.stringify(selectedCategories)); // Ajouter le contenu mis à jour du tableau ici
+    if (quantity_editable_material) {
+      formData.append("quantity_editable_material", 1);
+    } else {
+      formData.append("quantity_editable_material", 0);
+    }
+    if (kit) {
+      formData.append("kit", 1);
+    } else {
+      formData.append("kit", 0);
+    }
     await axios
-      .post(`http://localhost:8000/api/material`, formData)
+      .post(`http://localhost:8000/api/material`, formData, {
+        headers: {
+          Authorization: "Bearer" + localStorage.getItem("token"),
+        },
+      })
       .then(navigate("/materials"))
       .catch(({ response }) => {
         if (response.status === 422) {
@@ -56,7 +120,6 @@ const AddMaterial = () => {
         }
       });
   };
-
   return (
     <div>
       <MenuUser />
@@ -103,7 +166,8 @@ const AddMaterial = () => {
                       <Form.Group controlId="lontext">
                         <Form.Label>Description</Form.Label>
                         <Form.Control
-                          type="textaera"
+                          as="textarea"
+                          rows={3}
                           value={description_material}
                           onChange={(event) => {
                             setDescriptionMaterial(event.target.value);
@@ -126,6 +190,63 @@ const AddMaterial = () => {
                       </Form.Group>
                     </Col>
                   </Row>
+                  <Row>
+                    <Col>
+                      <Form.Group controlId="liter">
+                        <Form.Label>Litrage</Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={liter}
+                          onChange={(event) => {
+                            setLiter(event.target.value);
+                          }}
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Form.Check
+                        type="switch"
+                        id="custom-switch"
+                        label="Affecter une quantité"
+                        checked={quantity_editable_material}
+                        onChange={handleChangeSwitchQty}
+                      />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Form.Check
+                        type="switch"
+                        id="custom-switch"
+                        label="Ce produit est un kit aquarium"
+                        checked={kit}
+                        onChange={handleChangeSwitchKit}
+                      />
+                    </Col>
+                  </Row>
+                  {kit && (
+                    <Row>
+                      <Col>
+                        <Form.Label>Mon kit contient :</Form.Label>
+                        {categorie_included_kit.map(
+                          (categorie_material_kit) => (
+                            <Form.Check
+                              type={"checkbox"}
+                              id={categorie_material_kit.id}
+                              key={categorie_material_kit.id}
+                              label={
+                                categorie_material_kit.name_categorie_material
+                              }
+                              value={categorie_material_kit.id}
+                              onChange={handleCategoryChange}
+                            />
+                          )
+                        )}
+                      </Col>
+                    </Row>
+                  )}
                   <Row>
                     <Col>
                       <Form.Group controlId="PhotoMaterial" className="mb-3">

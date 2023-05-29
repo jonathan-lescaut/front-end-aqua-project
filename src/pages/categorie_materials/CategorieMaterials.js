@@ -27,8 +27,8 @@ const CategorieMaterials = () => {
     <div>
       <MenuUser />
       <MenuAdmin />
-      <div className="container mt-5">
-        <Table striped bordered hover>
+      <div>
+        <table>
           <thead>
             <tr>
               <th>Titre</th>
@@ -58,8 +58,9 @@ const CategorieMaterials = () => {
               </tr>
             ))}
           </tbody>
-        </Table>
+        </table>
       </div>
+      <a href="/categorie_materials/add">Ajouter</a>
     </div>
   );
 };

@@ -1,5 +1,10 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import Login from "./compoment/Auth/Login";
 import Register from "./compoment/Auth/Register";
 import Composition from "./compoment/Layouts/Project/Composition";
@@ -31,8 +36,38 @@ import ProjectsUser from "./pages/projects/ProjectsUser";
 import ProjectView from "./pages/projects/Views/ProjectView";
 import EditUser from "./pages/users/EditUser";
 import Users from "./pages/users/User";
+import jwt_decode from "jwt-decode";
+import axios from "axios";
+import WikiVisit from "./compoment/Layouts/Wiki/WikiVisit";
 
 function App() {
+  const [user, setUser] = useState("");
+  const [userToken, setUserToken] = useState("");
+
+  let token = false;
+  if (localStorage.getItem("token")) {
+    token = localStorage.getItem("token");
+  }
+
+  const displayUsers = async () => {
+    if (localStorage.token) {
+      await axios
+        .get("http://127.0.0.1:8000/api/current-user", {
+          headers: {
+            Authorization: "Bearer" + localStorage.token,
+          },
+        })
+        .then((res) => {
+          setUser(res.data);
+          const decoded = jwt_decode(token);
+          setUserToken(decoded.sub);
+        });
+    }
+  };
+  useEffect(() => {
+    displayUsers();
+  }, []); // Sans les crochets ça tourne en boucle
+
   return (
     <main className="App">
       <Router>
@@ -40,76 +75,111 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/projects/" element={<Projects />} />
-          <Route path="/projects/add" element={<AddProject />} />
-          <Route path="/projects/edit/:project" element={<EditProject />} />
-          <Route path="/projects/user/:user" element={<ProjectsUser />} />
-          <Route path="/project/view/:project" element={<ProjectView />} />
+          <Route path="/wiki" element={<WikiVisit />} />
+          <Route
+            path="/categorie_living/:categorie"
+            element={<ListeProduct />}
+          />
+          <Route
+            path="/categorie_decoration/:categorie"
+            element={<ListeProduct />}
+          />
+          <Route
+            path="/categorie_material/:categorie"
+            element={<ListeProduct />}
+          />
 
-          <Route path="/projects/user/new" element={<Start />} />
-          <Route
-            path="/projects/user/composition/project/:project"
-            element={<Composition />}
-          />
-          <Route
-            path="/projects/user/composition/projet/:project/categorie_living/:categorie"
-            element={<ListeProduct />}
-          />
-          <Route
-            path="/projects/user/composition/projet/:project/categorie_decoration/:categorie"
-            element={<ListeProduct />}
-          />
-          <Route
-            path="/projects/user/composition/projet/:project/categorie_material/:categorie"
-            element={<ListeProduct />}
-          />
-          <Route path="/livings/" element={<Livings />} />
-          <Route path="/livings/add" element={<AddLiving />} />
-          <Route path="/livings/edit/:living" element={<EditLiving />} />
-          <Route path="/materials/" element={<Materials />} />
-          <Route path="/materials/add" element={<AddMaterial />} />
-          <Route path="/materials/edit/:material" element={<EditMaterial />} />
-          <Route path="/decorations/" element={<Decorations />} />
-          <Route path="/decorations/add" element={<AddDecoration />} />
-          <Route
-            path="/decorations/edit/:decoration"
-            element={<EditDecoration />}
-          />
-          <Route path="/categorie_livings/" element={<CategorieLivings />} />
-          <Route
-            path="/categorie_livings/add"
-            element={<AddCategorieLiving />}
-          />
-          <Route
-            path="/categorie_livings/edit/:categorie_living"
-            element={<EditCategorieLiving />}
-          />
-          <Route
-            path="/categorie_decorations/"
-            element={<CategorieDecoration />}
-          />
-          <Route
-            path="/categorie_decorations/add"
-            element={<AddCategorieDecoration />}
-          />
-          <Route
-            path="/categorie_decorations/edit/:categorie_decoration"
-            element={<EditCategorieDecoration />}
-          />
-          <Route
-            path="/categorie_materials/"
-            element={<CategorieMaterials />}
-          />
-          <Route
-            path="/categorie_materials/add"
-            element={<AddCategorieMaterial />}
-          />
-          <Route
-            path="/categorie_materials/edit/:categorie_material"
-            element={<EditCategorieMaterial />}
-          />
-          <Route path="/users/" element={<Users />} />
-          <Route path="/users/edit/:user" element={<EditUser />} />
+          {token && parseInt(userToken) === parseInt(user.id) ? (
+            <>
+              <Route path="/projects/" element={<Projects />} />
+              <Route
+                path="/projects/add"
+                element={<AddProject userToken={userToken} />}
+              />
+              <Route path="/projects/edit/:project" element={<EditProject />} />
+              <Route
+                path="/projects/user/:user"
+                element={<ProjectsUser userToken={userToken} />}
+              />
+              <Route
+                path="/project/view/:project"
+                element={<ProjectView userToken={userToken} />}
+              />
+
+              <Route path="/projects/user/new" element={<Start />} />
+              <Route
+                path="/projects/user/composition/project/:project"
+                element={<Composition />}
+              />
+              <Route
+                path="/projects/user/composition/projet/:project/categorie_living/:categorie"
+                element={<ListeProduct userToken={userToken} />}
+              />
+              <Route
+                path="/projects/user/composition/projet/:project/categorie_decoration/:categorie"
+                element={<ListeProduct userToken={userToken} />}
+              />
+              <Route
+                path="/projects/user/composition/projet/:project/categorie_material/:categorie"
+                element={<ListeProduct userToken={userToken} />}
+              />
+              <Route path="/livings/" element={<Livings />} />
+              <Route path="/livings/add" element={<AddLiving />} />
+              <Route path="/livings/edit/:living" element={<EditLiving />} />
+              <Route path="/materials/" element={<Materials />} />
+              <Route path="/materials/add" element={<AddMaterial />} />
+              <Route
+                path="/materials/edit/:material"
+                element={<EditMaterial />}
+              />
+              <Route path="/decorations/" element={<Decorations />} />
+              <Route path="/decorations/add" element={<AddDecoration />} />
+              <Route
+                path="/decorations/edit/:decoration"
+                element={<EditDecoration />}
+              />
+              <Route
+                path="/categorie_livings/"
+                element={<CategorieLivings />}
+              />
+              <Route
+                path="/categorie_livings/add"
+                element={<AddCategorieLiving />}
+              />
+              <Route
+                path="/categorie_livings/edit/:categorie_living"
+                element={<EditCategorieLiving />}
+              />
+              <Route
+                path="/categorie_decorations/"
+                element={<CategorieDecoration />}
+              />
+              <Route
+                path="/categorie_decorations/add"
+                element={<AddCategorieDecoration />}
+              />
+              <Route
+                path="/categorie_decorations/edit/:categorie_decoration"
+                element={<EditCategorieDecoration />}
+              />
+              <Route
+                path="/categorie_materials/"
+                element={<CategorieMaterials />}
+              />
+              <Route
+                path="/categorie_materials/add"
+                element={<AddCategorieMaterial />}
+              />
+              <Route
+                path="/categorie_materials/edit/:categorie_material"
+                element={<EditCategorieMaterial />}
+              />
+              <Route path="/users/" element={<Users />} />
+              <Route path="/users/edit/:user" element={<EditUser />} />
+            </>
+          ) : (
+            <Route path="/login" element={<Login />} />
+          )}
         </Routes>
       </Router>
     </main>

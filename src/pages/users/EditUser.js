@@ -40,15 +40,8 @@ const EditUser = () => {
     formData.append("_method", "PATCH");
     formData.append("name", name);
     formData.append("email", email);
-    // if (roles) {
-    //   setRoles([roles]);
-    // } else {
-    //   setRoles(roles);
-    // }
     formData.append("roles", roles);
-    // for (var pair of formData.entries()) {
-    //   console.log(pair[0] + ", " + pair[1]);
-    // }
+
     await axios
       .post(`http://localhost:8000/api/users/${user}`, formData)
       .then(() => {

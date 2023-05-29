@@ -20,7 +20,11 @@ const Materials = () => {
 
   const deleteMaterial = (id) => {
     axios
-      .delete(`http://localhost:8000/api/material/${id}`)
+      .delete(`http://localhost:8000/api/material/${id}`, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      })
       .then(displayMaterials);
   };
 
@@ -28,15 +32,18 @@ const Materials = () => {
     <div>
       <MenuUser />
       <MenuAdmin />
-      <div className="container mt-5">
-        <Table striped bordered hover>
+      <div className="listeAdmin">
+        <table>
           <thead>
-            <tr>
+            <tr className="titleListAdmin">
               <th>Nom</th>
               <th>Description</th>
               <th>Prix</th>
               <th>image</th>
               <th>Catégorie</th>
+              <th>Litrage</th>
+              <th>Quantité</th>
+              <th>Kit</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -53,6 +60,11 @@ const Materials = () => {
                   />
                 </td>
                 <td>{material.name_categorie_material}</td>
+                <td>{material.liter}</td>
+                <td>
+                  {material.quantity_editable_material === 1 ? "oui" : "non"}
+                </td>
+                <td>{material.kit === 1 ? "oui" : "non"}</td>
                 <td>
                   <Button
                     variant="danger"
@@ -72,7 +84,7 @@ const Materials = () => {
               </tr>
             ))}
           </tbody>
-        </Table>
+        </table>
       </div>
     </div>
   );

@@ -20,9 +20,14 @@ const Projects = () => {
 
   const deleteProject = (id) => {
     axios
-      .delete(`http://localhost:8000/api/project/${id}`)
+      .delete(`http://localhost:8000/api/project/${id}`, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      })
       .then(displayProjects);
   };
+
   return (
     <div>
       <MenuUser />

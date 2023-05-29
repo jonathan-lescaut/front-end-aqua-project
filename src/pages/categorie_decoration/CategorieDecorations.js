@@ -27,8 +27,8 @@ const CategorieDecoration = () => {
     <div>
       <MenuUser />
       <MenuAdmin />
-      <div className="container mt-5">
-        <Table striped bordered hover>
+      <div>
+        <table>
           <thead>
             <tr>
               <th>Titre</th>
@@ -58,8 +58,9 @@ const CategorieDecoration = () => {
               </tr>
             ))}
           </tbody>
-        </Table>
+        </table>
       </div>
+      <a href="/categorie_decorations/add">Ajouter</a>
     </div>
   );
 };

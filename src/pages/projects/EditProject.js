@@ -10,27 +10,26 @@ import MenuUser from "../../compoment/Layouts/MenuUser";
 
 const EditProject = () => {
   const { project } = useParams();
-  const { living } = useParams();
 
   const navigate = useNavigate();
   const [title_project, setTitleProject] = useState("");
   const [start_project, setStartProject] = useState("");
-  const [name_living, setNameLiving] = useState("");
 
   const [validationError, setValidationError] = useState({});
   useEffect(() => {
     getProject();
   }, []);
 
-  useEffect(() => {
-    getLiving();
-  }, []);
-
   // GET - Récupère les valeurs de la fiche avec l'API
   const getProject = async () => {
     await axios
-      .get(`http://localhost:8000/api/project/${project}`)
+      .get(`http://localhost:8000/api/project/${project}`, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      })
       .then((res) => {
+        console.log(res.data.data.title_project);
         setTitleProject(res.data.title_project);
         setStartProject(res.data.start_project);
       })
@@ -38,17 +37,7 @@ const EditProject = () => {
         console.log(error);
       });
   };
-  const getLiving = async () => {
-    await axios
-      .get(`http://localhost:8000/api/living/`)
-      .then((res) => {
-        console.log(res);
-        setNameLiving(res.data.name_living);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+
   //Fonction d'ajout de project
   const updateProject = async (e) => {
     e.preventDefault();
@@ -111,7 +100,7 @@ const EditProject = () => {
                       <Form.Group controlId="Name">
                         <Form.Label>Date début de projet</Form.Label>
                         <Form.Control
-                          type="text"
+                          type="date"
                           value={start_project}
                           onChange={(event) => {
                             setStartProject(event.target.value);

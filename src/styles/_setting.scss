@@ -11,11 +11,41 @@ $color5: #0048b5;
   align-items: center;
 }
 
+@font-face {
+  font-family: 'RAINYDAYS';
+  /* Nom de la police */
+  src: url('./font/RAINYDAYS.ttf') format('truetype');
+  /* Chemin vers le fichier de police */
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Cocogoose';
+  /* Nom de la police */
+  src: url('./font/Cocogoose-Classic-ExtraBold-trial.ttf') format('truetype');
+  /* Chemin vers le fichier de police */
+  font-weight: normal;
+  font-style: normal;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
 body {
   background-image: url('../../public/images/backgroudImage.webp');
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
+  background-repeat: repeat;
   background-color: rgba(0, 0, 0, 0.5);
-  /* Opacité de 50% */
+}
+
+.messageAccueil,
+.boxWiki,
+.titleBand,
+.btnLienNavUser {
+  font-family: 'RAINYDAYS', sans-serif;
 }

@@ -13,7 +13,12 @@ const AddLiving = () => {
   const [name_living, setNameLiving] = useState("");
   const [description_living, setDescriptionLiving] = useState("");
   const [price_living, setPriceLiving] = useState("");
+  const [liter_min, setLiterMin] = useState("");
+  const [number_max, setNumberMax] = useState("");
+  const [number_min, setNumberMin] = useState("");
   const [picture_living, setPictureLiving] = useState("");
+  const [quantity_editable_living, setQuantityEditableLiving] = useState(true);
+  const [unique_living_category, setUniqueLivingCategory] = useState(false);
   const [categorie_living_id, setCategorieLivingId] = useState("");
   const [categorie_livings, setCategorieLivings] = useState([]);
   const [validationError, setValidationError] = useState({});
@@ -23,6 +28,12 @@ const AddLiving = () => {
   };
   const changeHandler = (event) => {
     setPictureLiving(event.target.files[0]);
+  };
+  const handleChangeSwitchQty = () => {
+    setQuantityEditableLiving(!quantity_editable_living);
+  };
+  const handleChangeSwitchUnique = () => {
+    setUniqueLivingCategory(!unique_living_category);
   };
   useEffect(() => {
     getCategorieLivings();
@@ -45,9 +56,26 @@ const AddLiving = () => {
     formData.append("description_living", description_living);
     formData.append("price_living", price_living);
     formData.append("picture_living", picture_living);
+    formData.append("liter_min", liter_min);
+    formData.append("number_max", number_max);
+    formData.append("number_min", number_min);
     formData.append("categorie_living_id", categorie_living_id);
+    if (quantity_editable_living) {
+      formData.append("quantity_editable_living", 1);
+    } else {
+      formData.append("quantity_editable_living", 0);
+    }
+    if (unique_living_category) {
+      formData.append("unique_living_category", 1);
+    } else {
+      formData.append("unique_living_category", 0);
+    }
     await axios
-      .post(`http://localhost:8000/api/living`, formData)
+      .post(`http://localhost:8000/api/living`, formData, {
+        headers: {
+          Authorization: "Bearer" + localStorage.getItem("token"),
+        },
+      })
       .then(navigate("/livings"))
       .catch(({ response }) => {
         if (response.status === 422) {
@@ -102,7 +130,8 @@ const AddLiving = () => {
                       <Form.Group controlId="lontext">
                         <Form.Label>Description</Form.Label>
                         <Form.Control
-                          type="textaera"
+                          as="textarea"
+                          rows={3}
                           value={description_living}
                           onChange={(event) => {
                             setDescriptionLiving(event.target.value);
@@ -125,6 +154,71 @@ const AddLiving = () => {
                       </Form.Group>
                     </Col>
                   </Row>
+                  <Row>
+                    <Col>
+                      <Form.Group controlId="liter_min">
+                        <Form.Label>Litrage minimum</Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={liter_min}
+                          onChange={(event) => {
+                            setLiterMin(event.target.value);
+                          }}
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Form.Group controlId="nb_max">
+                        <Form.Label>Nombre maximum / litrage</Form.Label>
+                        <Form.Control
+                          type="number"
+                          value={number_max}
+                          onChange={(event) => {
+                            setNumberMax(event.target.value);
+                          }}
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Form.Group controlId="nb_min">
+                        <Form.Label>Nombre minimum</Form.Label>
+                        <Form.Control
+                          type="number"
+                          value={number_min}
+                          onChange={(event) => {
+                            setNumberMin(event.target.value);
+                          }}
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Form.Check
+                        type="switch"
+                        id="custom-switch"
+                        label="Affecter une quantité"
+                        checked={quantity_editable_living}
+                        onChange={handleChangeSwitchQty}
+                      />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Form.Check
+                        type="switch"
+                        id="custom-switch"
+                        label="Ne pas mélanger avec les autres de sa catégorie"
+                        checked={unique_living_category}
+                        onChange={handleChangeSwitchUnique}
+                      />
+                    </Col>
+                  </Row>
+
                   <Row>
                     <Col>
                       <Form.Group controlId="PhotoLiving" className="mb-3">

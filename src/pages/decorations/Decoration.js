@@ -20,7 +20,11 @@ const Decorations = () => {
 
   const deleteDecoration = (id) => {
     axios
-      .delete(`http://localhost:8000/api/decoration/${id}`)
+      .delete(`http://localhost:8000/api/decoration/${id}`, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      })
       .then(displayDecorations);
   };
 
@@ -28,14 +32,15 @@ const Decorations = () => {
     <div>
       <MenuUser />
       <MenuAdmin />
-      <div className="container mt-5">
-        <Table striped bordered hover>
+      <div className="listeAdmin">
+        <table>
           <thead>
-            <tr>
+            <tr className="titleListAdmin">
               <th>Nom</th>
               <th>Description</th>
               <th>Prix</th>
               <th>image</th>
+              <th>Quantité</th>
               <th>Catégorie</th>
               <th>Actions</th>
             </tr>
@@ -52,6 +57,12 @@ const Decorations = () => {
                     width="100px"
                   />
                 </td>
+                <td>
+                  {decoration.quantity_editable_decoration === 1
+                    ? "oui"
+                    : "non"}
+                </td>
+
                 <td>{decoration.name_categorie_decoration}</td>
                 <td>
                   <Button
@@ -72,7 +83,7 @@ const Decorations = () => {
               </tr>
             ))}
           </tbody>
-        </Table>
+        </table>
       </div>
     </div>
   );

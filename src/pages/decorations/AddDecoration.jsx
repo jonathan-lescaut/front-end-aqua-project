@@ -14,6 +14,8 @@ const AddDecoration = () => {
   const [description_decoration, setDescriptionDecoration] = useState("");
   const [price_decoration, setPriceDecoration] = useState("");
   const [picture_decoration, setPictureDecoration] = useState("");
+  const [quantity_editable_decoration, setQuantityEditableDecoration] =
+    useState(true);
   const [categorie_decoration_id, setCategorieDecorationId] = useState("");
   const [categorie_decorations, setCategorieDecorations] = useState([]);
   const [validationError, setValidationError] = useState({});
@@ -23,6 +25,9 @@ const AddDecoration = () => {
   };
   const changeHandler = (event) => {
     setPictureDecoration(event.target.files[0]);
+  };
+  const handleChangeSwitch = () => {
+    setQuantityEditableDecoration(!quantity_editable_decoration);
   };
   useEffect(() => {
     getCategorieDecorations();
@@ -46,8 +51,17 @@ const AddDecoration = () => {
     formData.append("price_decoration", price_decoration);
     formData.append("picture_decoration", picture_decoration);
     formData.append("categorie_decoration_id", categorie_decoration_id);
+    if (quantity_editable_decoration) {
+      formData.append("quantity_editable_decoration", 1);
+    } else {
+      formData.append("quantity_editable_decoration", 0);
+    }
     await axios
-      .post(`http://localhost:8000/api/decoration`, formData)
+      .post(`http://localhost:8000/api/decoration`, formData, {
+        headers: {
+          Authorization: "Bearer" + localStorage.getItem("token"),
+        },
+      })
       .then(navigate("/decorations"))
       .catch(({ response }) => {
         if (response.status === 422) {
@@ -55,7 +69,7 @@ const AddDecoration = () => {
         }
       });
   };
-
+  console.log(localStorage.getItem("token"));
   return (
     <div>
       <MenuUser />
@@ -102,7 +116,8 @@ const AddDecoration = () => {
                       <Form.Group controlId="lontext">
                         <Form.Label>Description</Form.Label>
                         <Form.Control
-                          type="textaera"
+                          as="textarea"
+                          rows={3}
                           value={description_decoration}
                           onChange={(event) => {
                             setDescriptionDecoration(event.target.value);
@@ -123,6 +138,17 @@ const AddDecoration = () => {
                           }}
                         />
                       </Form.Group>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Form.Check
+                        type="switch"
+                        id="custom-switch"
+                        label="Affecter une quantité"
+                        checked={quantity_editable_decoration}
+                        onChange={handleChangeSwitch}
+                      />
                     </Col>
                   </Row>
                   <Row>

@@ -11,15 +11,17 @@ const MenuUser = () => {
   // const [role, setRole] = useState([]);
 
   const displayUsers = async () => {
-    await axios
-      .get("http://127.0.0.1:8000/api/current-user", {
-        headers: {
-          Authorization: "Bearer" + localStorage.token,
-        },
-      })
-      .then((res) => {
-        setUser(res.data);
-      });
+    if (localStorage.token) {
+      await axios
+        .get("http://127.0.0.1:8000/api/current-user", {
+          headers: {
+            Authorization: "Bearer" + localStorage.token,
+          },
+        })
+        .then((res) => {
+          setUser(res.data);
+        });
+    }
   };
   const handleLogout = async () => {
     try {
@@ -49,32 +51,36 @@ const MenuUser = () => {
 
   return (
     <div className="bandHeader">
-      <div>
+      <div className="logoTitle">
         <img
           src={process.env.PUBLIC_URL + "/images/logo.webp"}
           alt="logo"
           srcSet={process.env.PUBLIC_URL + "/images/logo.webp"}
         />
+        <div className="titleBand">Aqua Project</div>
       </div>
+      <div className="blockBtnHeader">
+        <a className="btnLienNavUser" href="/wiki">
+          Le Wiki
+        </a>
 
-      <a className="btnLienNavUser" href="/projects">
-        Le Wiki
-      </a>
+        {user.name ? (
+          <div className="btnUserConnect">
+            <a className="btnLienNavUser" href={`/projects/user/${user.id}`}>
+              Mes aquariums
+            </a>
 
-      {user.name ? (
-        <div className="btnUserConnect">
-          <a className="btnLienNavUser" href={`/projects/user/${user.id}`}>
-            Mes aquariums
-          </a>
-
-          <button onClick={handleLogout}>Logout</button>
-          <div className="btnUser">{user.name.charAt(0).toUpperCase()}</div>
-        </div>
-      ) : (
-        <button onClick={() => navigate("/login")}>Se connecter</button>
-      )}
-
-      <div className="titleBand">Aqua Project</div>
+            <button className="btnLienNavUser" onClick={handleLogout}>
+              Logout
+            </button>
+            <div className="btnUser">{user.name.charAt(0).toUpperCase()}</div>
+          </div>
+        ) : (
+          <button className="btnLienNavUser" onClick={() => navigate("/login")}>
+            Se connecter
+          </button>
+        )}
+      </div>
     </div>
   );
 };

@@ -5,7 +5,6 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import Login from "../../compoment/Auth/Login";
 import MenuAdmin from "../../compoment/Layouts/MenuAdmin";
 import MenuUser from "../../compoment/Layouts/MenuUser";
 
@@ -16,6 +15,9 @@ const EditDecoration = () => {
   const [description_decoration, setDescriptionDecoration] = useState("");
   const [price_decoration, setPriceDecoration] = useState("");
   const [picture_decoration, setPictureDecoration] = useState("");
+  const [quantity_editable_decoration, setQuantityEditableDecoration] =
+    useState("");
+
   const [categorie_decoration_id, setCategorieDecorationId] = useState("");
   const [categorie_decorations, setCategorieDecorations] = useState([]);
   const [validationError, setValidationError] = useState({});
@@ -27,6 +29,9 @@ const EditDecoration = () => {
 
   const handleChange = (event) => {
     setCategorieDecorationId(event.target.value);
+  };
+  const handleChangeSwitch = () => {
+    setQuantityEditableDecoration(!quantity_editable_decoration);
   };
 
   useEffect(() => {
@@ -51,6 +56,7 @@ const EditDecoration = () => {
         setPriceDecoration(res.data.price_decoration);
         setPictureDecoration(res.data.picture_decoration);
         setCategorieDecorationId(res.data.categorie_decoration_id);
+        setQuantityEditableDecoration(res.data.quantity_editable_decoration);
       })
       .catch((error) => {
         console.log(error);
@@ -67,13 +73,23 @@ const EditDecoration = () => {
     formData.append("price_decoration", price_decoration);
     formData.append("picture_decoration", picture_decoration);
     formData.append("categorie_decoration_id", categorie_decoration_id);
-
+    if (picture_decoration) {
+      formData.append("picture_decoration", picture_decoration);
+    }
     if (picture_decoration !== null) {
       formData.append("picture_decoration", picture_decoration);
     }
-
+    if (quantity_editable_decoration) {
+      formData.append("quantity_editable_decoration", 1);
+    } else {
+      formData.append("quantity_editable_decoration", 0);
+    }
     await axios
-      .post(`http://localhost:8000/api/decoration/${decoration}`, formData)
+      .post(`http://localhost:8000/api/decoration/${decoration}`, formData, {
+        headers: {
+          Authorization: "Bearer" + localStorage.getItem("token"),
+        },
+      })
       .then(navigate("/decorations"))
       .catch(({ response }) => {
         if (response.status === 422) {
@@ -127,7 +143,8 @@ const EditDecoration = () => {
                       <Form.Group controlId="Name">
                         <Form.Label>Description</Form.Label>
                         <Form.Control
-                          type="text"
+                          as="textarea"
+                          rows={3}
                           value={description_decoration}
                           onChange={(event) => {
                             setDescriptionDecoration(event.target.value);
@@ -161,6 +178,17 @@ const EditDecoration = () => {
                           ref={fileInputRef}
                         />
                       </Form.Group>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Form.Check
+                        type="switch"
+                        id="custom-switch"
+                        label="Affecter une quantité"
+                        checked={quantity_editable_decoration}
+                        onChange={handleChangeSwitch}
+                      />
                     </Col>
                   </Row>
                   <Row>

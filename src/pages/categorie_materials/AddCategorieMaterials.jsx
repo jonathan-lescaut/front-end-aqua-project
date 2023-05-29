@@ -11,13 +11,22 @@ import MenuUser from "../../compoment/Layouts/MenuUser";
 const AddCategorieMaterial = () => {
   const navigate = useNavigate();
   const [name_categorie_material, setTitleCategorieMaterial] = useState("");
-  const [validationError, setValidationError] = useState({});
+  const [included_kit, setIncludedKit] = useState(false);
 
+  const [validationError, setValidationError] = useState({});
+  const handleChangeSwitch = () => {
+    setIncludedKit(!included_kit);
+  };
   //Fonction d'ajout de project
   const addCategorieMaterial = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("name_categorie_material", name_categorie_material);
+    if (included_kit) {
+      formData.append("included_kit", 1);
+    } else {
+      formData.append("included_kit", 0);
+    }
     await axios
       .post(`http://localhost:8000/api/categorie_material`, formData)
       .then(navigate("/categorie_materials"))
@@ -69,6 +78,17 @@ const AddCategorieMaterial = () => {
                           }}
                         />
                       </Form.Group>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Form.Check
+                        type="switch"
+                        id="custom-switch"
+                        label="Inclus dans un kit d'aquarium"
+                        checked={included_kit}
+                        onChange={handleChangeSwitch}
+                      />
                     </Col>
                   </Row>
                   <Button

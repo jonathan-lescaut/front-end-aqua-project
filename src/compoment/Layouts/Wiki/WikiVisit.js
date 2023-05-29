@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import MenuUser from "./MenuUser";
+import MenuUser from "../MenuUser";
 
-const MenuWiki = () => {
-  const navigate = useNavigate();
-  const { project } = useParams();
+const WikiVisit = () => {
   const [categorie_decorations, setCategorieDecorations] = useState([]);
   const [categorie_livings, setCategorieLivings] = useState([]);
   const [categorie_materials, setCategorieMaterials] = useState([]);
@@ -60,7 +57,7 @@ const MenuWiki = () => {
           href="#"
           onClick={handleClick}
         >
-          DEcorations
+          Decorations
         </a>
         <a
           id="WikiMaterials"
@@ -87,7 +84,7 @@ const MenuWiki = () => {
       >
         {categorie_decorations.map((categorie_decoration) => (
           <a
-            href={`/projects/user/composition/projet/${project}/categorie_decoration/${categorie_decoration.id}`}
+            href={`/categorie_decoration/${categorie_decoration.id}`}
             className="btnSousMenu btnSousMenuDecoration"
             key={categorie_decoration.id}
             value={categorie_decoration.id}
@@ -104,7 +101,7 @@ const MenuWiki = () => {
       >
         {categorie_materials.map((categorie_material) => (
           <a
-            href={`/projects/user/composition/projet/${project}/categorie_material/${categorie_material.id}`}
+            href={`/categorie_material/${categorie_material.id}`}
             className="btnSousMenu btnSousMenuMaterial"
             key={categorie_material.id}
             value={categorie_material.id}
@@ -121,7 +118,7 @@ const MenuWiki = () => {
       >
         {categorie_livings.map((categorie_living) => (
           <a
-            href={`/projects/user/composition/projet/${project}/categorie_living/${categorie_living.id}`}
+            href={`/categorie_living/${categorie_living.id}`}
             className="btnSousMenu btnSousMenuLiving"
             key={categorie_living.id}
             value={categorie_living.id}
@@ -133,4 +130,4 @@ const MenuWiki = () => {
     </>
   );
 };
-export default MenuWiki;
+export default WikiVisit;

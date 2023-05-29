@@ -9,12 +9,17 @@ import MenuAdmin from "../../compoment/Layouts/MenuAdmin";
 import MenuUser from "../../compoment/Layouts/MenuUser";
 
 const EditLiving = () => {
-  const { living } = useParams();
   const navigate = useNavigate();
+  const { living } = useParams();
   const [name_living, setNameLiving] = useState("");
   const [description_living, setDescriptionLiving] = useState("");
   const [price_living, setPriceLiving] = useState("");
   const [picture_living, setPictureLiving] = useState("");
+  const [quantity_editable_living, setQuantityEditableLiving] = useState("");
+  const [liter_min, setLiterMin] = useState("");
+  const [number_max, setNumberMax] = useState("");
+  const [number_min, setNumberMin] = useState("");
+  const [unique_living_category, setUniqueLivingCategory] = useState("");
   const [categorie_living_id, setCategorieLivingId] = useState("");
   const [categorie_livings, setCategorieLivings] = useState([]);
   const [validationError, setValidationError] = useState({});
@@ -26,7 +31,12 @@ const EditLiving = () => {
   const handleChange = (event) => {
     setCategorieLivingId(event.target.value);
   };
-
+  const handleChangeSwitchQty = () => {
+    setQuantityEditableLiving(!quantity_editable_living);
+  };
+  const handleChangeSwitchUnique = () => {
+    setUniqueLivingCategory(!unique_living_category);
+  };
   useEffect(() => {
     getLiving();
     getCategorieLivings();
@@ -49,6 +59,11 @@ const EditLiving = () => {
         setPriceLiving(res.data.price_living);
         setPictureLiving(res.data.picture_living);
         setCategorieLivingId(res.data.categorie_living_id);
+        setQuantityEditableLiving(res.data.quantity_editable_living);
+        setLiterMin(res.data.liter_min);
+        setNumberMax(res.data.number_max);
+        setNumberMin(res.data.number_min);
+        setUniqueLivingCategory(res.data.unique_living_category);
       })
       .catch((error) => {
         console.log(error);
@@ -63,15 +78,32 @@ const EditLiving = () => {
     formData.append("name_living", name_living);
     formData.append("description_living", description_living);
     formData.append("price_living", price_living);
-    formData.append("picture_living", picture_living);
-    formData.append("categorie_living_id", categorie_living_id);
-
+    formData.append("liter_min", liter_min);
+    formData.append("number_max", number_max);
+    formData.append("number_min", number_min);
+    if (picture_living) {
+      formData.append("picture_living", picture_living);
+    }
     if (picture_living !== null) {
       formData.append("picture_living", picture_living);
     }
-
+    formData.append("categorie_living_id", categorie_living_id);
+    if (quantity_editable_living) {
+      formData.append("quantity_editable_living", 1);
+    } else {
+      formData.append("quantity_editable_living", 0);
+    }
+    if (unique_living_category) {
+      formData.append("unique_living_category", 1);
+    } else {
+      formData.append("unique_living_category", 0);
+    }
     await axios
-      .post(`http://localhost:8000/api/living/${living}`, formData)
+      .post(`http://localhost:8000/api/living/${living}`, formData, {
+        headers: {
+          Authorization: "Bearer" + localStorage.getItem("token"),
+        },
+      })
       .then(navigate("/livings"))
       .catch(({ response }) => {
         if (response.status === 422) {
@@ -125,7 +157,8 @@ const EditLiving = () => {
                       <Form.Group controlId="Name">
                         <Form.Label>Description</Form.Label>
                         <Form.Control
-                          type="text"
+                          as="textarea"
+                          rows={3}
                           value={description_living}
                           onChange={(event) => {
                             setDescriptionLiving(event.target.value);
@@ -158,6 +191,72 @@ const EditLiving = () => {
                           ref={fileInputRef}
                         />
                       </Form.Group>
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <Col>
+                      <Form.Group controlId="liter_min">
+                        <Form.Label>Litrage minimum</Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={liter_min}
+                          onChange={(event) => {
+                            setLiterMin(event.target.value);
+                          }}
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Form.Group controlId="nb_max">
+                        <Form.Label>Nombre maximum / litrage</Form.Label>
+                        <Form.Control
+                          type="number"
+                          value={number_max}
+                          onChange={(event) => {
+                            setNumberMax(event.target.value);
+                          }}
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Form.Group controlId="nb_min">
+                        <Form.Label>Nombre minimum</Form.Label>
+                        <Form.Control
+                          type="number"
+                          value={number_min}
+                          onChange={(event) => {
+                            setNumberMin(event.target.value);
+                          }}
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <Col>
+                      <Form.Check
+                        type="switch"
+                        id="custom-switch"
+                        label="Affecter une quantité"
+                        checked={quantity_editable_living}
+                        onChange={handleChangeSwitchQty}
+                      />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Form.Check
+                        type="switch"
+                        id="custom-switch"
+                        label="Ne pas mélanger avec les autres de sa catégorie"
+                        checked={unique_living_category}
+                        onChange={handleChangeSwitchUnique}
+                      />
                     </Col>
                   </Row>
                   <Row>

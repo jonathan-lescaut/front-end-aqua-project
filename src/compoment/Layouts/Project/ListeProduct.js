@@ -6,10 +6,15 @@ import { useParams } from "react-router-dom";
 import Living from "../Product/Living";
 import Material from "../Product/Material";
 import Decoration from "../Product/Decoration";
+import WikiVisit from "../Wiki/WikiVisit";
 
-const ListeProduct = () => {
+const ListeProduct = (props) => {
   const { categorie } = useParams();
   const [products, setProduct] = useState([]);
+
+  const userToken = props.userToken;
+  console.log(userToken);
+
   // détermine la catégorie en fonction de l'URL
   const typeCategorie = (() => {
     if (window.location.href.includes("categorie_decoration")) {
@@ -36,7 +41,6 @@ const ListeProduct = () => {
         )
         .then((res) => {
           setProduct(res.data.data);
-          console.log(res.data.data);
         });
     }
   };
@@ -46,20 +50,26 @@ const ListeProduct = () => {
     material: products.filter((product) => product.name_material),
     living: products.filter((product) => product.name_living),
   };
-
+  console.log(userToken);
   return (
     <>
-      <MenuUser />
-      <MenuWiki />
+      {userToken ? <MenuWiki /> : <WikiVisit />}
+
       <div className="listeProduct">
         {typeCategorie === "living" && (
-          <Living products={filteredProducts.living} />
+          <Living products={filteredProducts.living} userToken={userToken} />
         )}
         {typeCategorie === "material" && (
-          <Material products={filteredProducts.material} />
+          <Material
+            products={filteredProducts.material}
+            userToken={userToken}
+          />
         )}
         {typeCategorie === "decoration" && (
-          <Decoration products={filteredProducts.decoration} />
+          <Decoration
+            products={filteredProducts.decoration}
+            userToken={userToken}
+          />
         )}
       </div>
     </>

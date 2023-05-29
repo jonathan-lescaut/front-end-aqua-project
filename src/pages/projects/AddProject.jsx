@@ -8,27 +8,37 @@ import { useNavigate } from "react-router-dom";
 import MenuAdmin from "../../compoment/Layouts/MenuAdmin";
 import MenuUser from "../../compoment/Layouts/MenuUser";
 
-const AddProject = () => {
+const AddProject = (props) => {
   const navigate = useNavigate();
   const [title_project, setTitleProject] = useState("");
   const [start_project, setStartProject] = useState("");
-  const [user_id, setUserId] = useState("");
 
   const [validationError, setValidationError] = useState({});
-
+  const user_token = props.userToken;
   //Fonction d'ajout de project
   const addProject = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("title_project", title_project);
     formData.append("start_project", start_project);
-    formData.append("user_id", user_id);
+    formData.append("user_id", user_token);
     await axios
-      .post(`http://localhost:8000/api/project`, formData)
-      .then(navigate("/projects"))
-      .catch(({ response }) => {
-        if (response.status === 422) {
-          setValidationError(response.data.errors);
+      .post(`http://localhost:8000/api/project`, formData, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      })
+      .then((response) => {
+        navigate(`/projects/user/${user_token}`);
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 422) {
+          setValidationError(error.response.data.errors);
+        } else {
+          console.error(
+            "Une erreur s'est produite lors de la requête :",
+            error
+          );
         }
       });
   };
@@ -83,20 +93,6 @@ const AddProject = () => {
                           value={start_project}
                           onChange={(event) => {
                             setStartProject(event.target.value);
-                          }}
-                        />
-                      </Form.Group>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <Form.Group controlId="Date">
-                        <Form.Label>User</Form.Label>
-                        <Form.Control
-                          type="text"
-                          value={user_id}
-                          onChange={(event) => {
-                            setUserId(event.target.value);
                           }}
                         />
                       </Form.Group>

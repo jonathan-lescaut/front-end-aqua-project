@@ -1,6 +1,8 @@
 @import "./setting";
 
 
+
+
 .container {
     display: flex;
     justify-content: center;
@@ -41,6 +43,7 @@
 .boxNav {
     display: flex;
     justify-content: space-around;
+    margin-top: 15px;
 
 }
 
@@ -54,8 +57,12 @@
     background-color: #759cd7;
 }
 
-.boxWikiLiving:hover {
-    background-color: #759cd789;
+.boxWikiLiving:hover,
+.boxWikiDecoration:hover,
+.boxWikiMaterial:hover {
+    border: solid #000000 5px;
+    transition: border-color 0.9s ease;
+    color: black;
 }
 
 .boxWikiMaterial {
@@ -78,6 +85,8 @@
 
     .btnUserConnect {
         display: flex;
+        height: 100%;
+        align-items: center;
     }
 
     .btnUser {
@@ -95,7 +104,19 @@
     .titleBand {
         font-size: 3rem;
         font-weight: bold;
+        padding-left: 15px;
     }
+
+    .logoTitle {
+        display: flex;
+        align-items: center;
+    }
+}
+
+.blockBtnHeader {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
 }
 
 .btnLienNavUser {
@@ -234,6 +255,14 @@
     font-size: 1.5rem;
     border-radius: 10px;
     margin-right: 10px;
+    text-transform: none;
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+    font-family: 'Cocogoose', sans-serif;
+}
+
+.btnSousMenu:hover {
+    color: black;
 }
 
 .btnSousMenuLiving {
@@ -270,6 +299,7 @@ td {
     margin: 35px 40px;
     max-width: 100%;
     flex-wrap: wrap;
+    justify-content: space-between;
 }
 
 .ficheProduct {
@@ -288,6 +318,62 @@ td {
         width: 100px;
         border-radius: 10px;
     }
+
+    h2 {
+        min-height: 150px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        text-align: center;
+    }
+
+    .priceProduct {
+        text-align: center;
+        background-color: #2512ff;
+        color: white;
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    .descriptionFiche {
+        height: 100px;
+        text-align: center;
+    }
+
+    .btnLienFiche {
+        background-color: #0048b5;
+        border-radius: 10px;
+        font-size: 2rem;
+        color: white;
+        text-align: center;
+        width: 100%;
+
+    }
+}
+
+.tabCatProject {
+    display: flex;
+    margin-left: 65px;
+    background-color: #ffffff2d;
+
+    .tabTitleCatProject,
+    .activeTabProduct {
+        padding: 5px;
+        margin-top: 5px;
+        width: 33%;
+        text-align: center;
+        font-weight: bold;
+        color: white;
+        cursor: pointer;
+        font-weight: normal;
+        font-size: 2rem;
+    }
+
+    .activeTabProduct {
+        background-color: #ffffff8f;
+        color: #000000;
+        font-size: 2rem;
+    }
 }
 
 .titreCatViewProject {
@@ -296,27 +382,19 @@ td {
     padding: 5px;
     margin-bottom: 0px;
     margin-top: 5px;
-
-
-}
-
-.titleViewProject {
-    background-color: #ffffffc4;
-    padding: 5px;
-    font-size: 2.5rem;
-    text-align: center;
+    min-width: 9.5em;
 }
 
 .pageViewProject {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     margin-top: 15px;
 }
 
 .blocRightView {
     display: flex;
     flex-direction: column;
-    width: 90%;
+    width: 55%;
     align-items: flex-end;
 
     .instructionViewProject {
@@ -340,9 +418,10 @@ td {
 }
 
 .addProductPageView {
-    margin-left: 65px;
-    width: 50%;
-    margin-right: 65px;
+    padding: 40px 130px 40px 130px;
+    border-radius: 10px;
+    width: 60%;
+    background-color: #ffffff2c;
 }
 
 .blocAddView {
@@ -379,18 +458,22 @@ td {
 
 .blocProductView {
     display: flex;
+    align-items: center;
 }
 
 .lienProductWiki {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: #ffffff4b;
     border-radius: 30px;
     width: 30px;
-    text-align: center;
     font-weight: bolder;
     margin-left: 3px;
     margin-right: 3px;
     padding: 5px;
     margin-top: 5px;
+    max-height: 30px;
 }
 
 .inputQty {
@@ -426,4 +509,258 @@ td {
     background-color: #ffffff49;
     font-weight: bold;
     border: solid 2px #00000039;
+}
+
+.blocBtnCreateProject {
+    margin-top: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.btnCreateProject {
+    background-color: #fff;
+    color: #000000;
+    text-transform: none;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    width: 500px;
+    border-radius: 20px;
+    height: 70%;
+    font-size: 2rem;
+    padding: 5px 50px;
+    background: #759CD7;
+    color: #534319;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.listeAdmin {
+    display: flex;
+    justify-content: center;
+}
+
+.titleListAdmin th {
+    background-color: black;
+    border: solid 5px #000000;
+}
+
+.listeAdmin table {
+    margin-top: 25px;
+    width: 80%;
+}
+
+.listeAdmin tbody tr td {
+    border: solid 5px #000000;
+}
+
+.literDiv {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+
+}
+
+.hiddenCat {
+    visibility: hidden;
+}
+
+.hiddenCatQty {
+    visibility: hidden;
+}
+
+.lineJoin {
+    width: 100%;
+    height: 2px;
+    background-color: #ffffff3d;
+}
+
+.allProjectUser {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    font-size: 2rem;
+}
+
+.btnAllProject a {
+    margin-right: 60px;
+    margin-left: 60px;
+
+}
+
+.TitleAllProjectUser {
+    font-size: 3rem;
+}
+
+.titleProject {
+    background-color: #ffffff5f;
+    text-align: center;
+}
+
+.btnViewProject {
+    text-transform: none;
+    text-decoration: none;
+    width: 500px;
+    border-radius: 20px;
+    height: 70%;
+    font-size: 2rem;
+    padding: 5px 50px;
+    background: #759CD7;
+    color: #534319;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.imgBc {
+    width: 30%;
+}
+
+.blocHome {
+    margin-top: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.messageAccueil {
+    color: #fff;
+    font-size: 2rem;
+    padding-left: 10px;
+}
+
+
+
+/* Styles pour les appareils plus petits que l'iPhone X */
+@media (max-width: 390px) {
+
+    .bandHeader {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+
+        .logoTitle {
+            margin-bottom: 15px;
+        }
+    }
+
+    .bandHeader .titleBand {
+        font-size: 1.2rem;
+    }
+
+    .logoTitle img {
+        width: 60px;
+    }
+
+    .btnLienNavUser {
+        width: 80px;
+        font-size: 1rem;
+        text-align: center;
+        height: 100%;
+    }
+
+    .blockBtnHeader {
+        width: 100%;
+        display: flex;
+        justify-content: space-around
+    }
+
+    .boxNav {
+        display: flex;
+        flex-direction: column;
+
+        .boxWiki {
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+    }
+
+    .show {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .ficheProduct {
+        width: 48%;
+        margin-left: 0px;
+        margin-right: 0px;
+
+        h2 {
+            font-size: .9rem;
+            min-height: 50px;
+        }
+
+        .descriptionFiche {
+            font-size: .6rem;
+            height: 60px;
+
+        }
+
+
+    }
+
+    .blocBtnCreateProject .btnCreateProject {
+        font-size: 1.4rem;
+        text-align: center;
+    }
+
+    .TitleAllProjectUser {
+        font-size: 1.5rem;
+        width: 100%;
+    }
+
+    .titleProject {
+        height: 50px;
+    }
+
+    .allProjectUser {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+        font-size: 1rem;
+    }
+
+    .aquaUser {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .btnAllProject a {
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+
+    .btnAllProject {
+        text-align: center;
+    }
+
+    .btnViewProject {
+        margin-bottom: 10px;
+    }
+
+    .tabCatProject {
+        display: flex;
+        margin-left: 0px;
+
+        .tabTitleCatProject {
+            font-size: 1rem;
+        }
+    }
+
+    .addProductPageView {
+        width: 100%;
+        padding: 0px;
+    }
+
+    /* Styles pour les écrans plus petits que l'iPhone X */
+}
+
+/* Styles pour les appareils plus grands que l'iPhone X */
+@media (min-width: 376px) {
+    /* Styles pour les écrans plus grands que l'iPhone X */
 }

@@ -27,8 +27,8 @@ const CategorieLivings = () => {
     <div>
       <MenuUser />
       <MenuAdmin />
-      <div className="container mt-5">
-        <Table striped bordered hover>
+      <div>
+        <table>
           <thead>
             <tr>
               <th>Titre</th>
@@ -58,8 +58,9 @@ const CategorieLivings = () => {
               </tr>
             ))}
           </tbody>
-        </Table>
+        </table>
       </div>
+      <a href="/categorie_livings/add">Ajouter</a>
     </div>
   );
 };

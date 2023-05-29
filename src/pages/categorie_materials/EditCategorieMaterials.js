@@ -12,19 +12,22 @@ const EditCategorieMaterial = () => {
   const { categorie_material } = useParams();
   const navigate = useNavigate();
   const [name_categorie_material, setNameCategorieMaterial] = useState("");
+  const [included_kit, setIncludedKit] = useState("");
 
   const [validationError, setValidationError] = useState({});
   useEffect(() => {
     getCategorieMaterial();
   }, []);
-
+  const handleChangeSwitch = () => {
+    setIncludedKit(!included_kit);
+  };
   // GET - Récupère les valeurs de la fiche avec l'API
   const getCategorieMaterial = async () => {
     await axios
       .get(`http://localhost:8000/api/categorie_material/${categorie_material}`)
       .then((res) => {
-        console.log(res.data);
         setNameCategorieMaterial(res.data.name_categorie_material);
+        setIncludedKit(res.data.included_kit);
       })
       .catch((error) => {
         console.log(error);
@@ -37,6 +40,11 @@ const EditCategorieMaterial = () => {
     const formData = new FormData();
     formData.append("_method", "PATCH");
     formData.append("name_categorie_material", name_categorie_material);
+    if (included_kit) {
+      formData.append("included_kit", 1);
+    } else {
+      formData.append("included_kit", 0);
+    }
     await axios
       .post(
         `http://localhost:8000/api/categorie_material/${categorie_material}`,
@@ -88,6 +96,17 @@ const EditCategorieMaterial = () => {
                           }}
                         />
                       </Form.Group>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Form.Check
+                        type="switch"
+                        id="custom-switch"
+                        label="Inclus dans un kit d'aquarium"
+                        checked={included_kit}
+                        onChange={handleChangeSwitch}
+                      />
                     </Col>
                   </Row>
                   <Button

@@ -1,173 +1,106 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import MenuAdmin from "../../../compoment/Layouts/MenuAdmin";
 import MenuUser from "../../../compoment/Layouts/MenuUser";
+import { useNavigate, useParams } from "react-router-dom";
+import Decoration from "./Tabs/Decoration";
+import Living from "./Tabs/Livings";
+import Material from "./Tabs/Material";
 
-const ProjectView = () => {
+const ProjectView = (props) => {
   const { project } = useParams();
-  const [selectedProductType, setSelectedProductType] = useState("living");
+  const [selectedProductType, setSelectedProductType] = useState();
+  const [categorie_ma_cuve_id, setCategorieMaCuveId] = useState([]);
+  const [liter, setLiter] = useState([]);
+  const navigate = useNavigate();
+  const userToken = props.userToken;
 
-  const [projectProducts, setProjectProducts] = useState([]);
-  const [categorie_livings, setCategorieLivings] = useState([]);
-  const [categorie_materials, setCategorieMaterials] = useState([]);
-  const [categorie_decorations, setCategorieDecorations] = useState([]);
-
-  console.log(selectedProductType);
-  let type = "living"; // Valeur par défaut
-
-  if (selectedProductType === "material") {
-    type = "material";
-  } else if (selectedProductType === "decoration") {
-    type = "decoration";
-  }
-  const displayProjectProducts = async () => {
-    await axios
-      .get(`http://127.0.0.1:8000/api/project/${type}/${project}`)
-      .then((res) => {
-        setProjectProducts(res.data.data.livings);
-      });
+  const verifyProjectUser = async () => {
+    const response = await axios.get(
+      `http://localhost:8000/api/project/user/${userToken}`
+    );
+    const projects = response.data;
+    const projectExists = projects.some((p) => p.id === parseInt(project));
+    if (!projectExists) {
+      navigate("/");
+    }
   };
   //Méthode pour récupérer les caté deco
-  const getCategorieLivings = async () => {
+  const getCategorieCuve = async () => {
     await axios
-      .get(`http://127.0.0.1:8000/api/categorie_${type}`)
+      .get(`http://127.0.0.1:8000/api/categorie_material`)
       .then((res) => {
-        setCategorieLivings(res.data);
+        const categories = res.data;
+        const maCuveCategory = categories.find(
+          (category) => category.name_categorie_material === "Ma cuve"
+        );
+        setCategorieMaCuveId(maCuveCategory.id); // Stockez l'ID de la catégorie 'ma cuve'
       });
   };
 
-  const updateProductQuantity = async (productId, newQuantity) => {
-    try {
-      await axios.put(
-        `http://127.0.0.1:8000/api/project/${project}/${type}/${productId}/quantity?${type}_quantity=${newQuantity}`
-      );
-      displayProjectProducts();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const deleteProduct = async (productId) => {
-    try {
-      await axios.delete(
-        `http://127.0.0.1:8000/api/project/${project}/${type}/${productId}`
-      );
-      displayProjectProducts();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const handleDecreaseQty = (productId, currentQty) => {
-    if (currentQty > 1) {
-      const newQty = parseInt(currentQty) - 1;
-      updateProductQuantity(productId, newQty);
-    }
-  };
-  const handleIncreaseQty = (productId, currentQty) => {
-    const newQty = parseInt(currentQty) + 1;
-    updateProductQuantity(productId, newQty);
+  const cuveLiter = async () => {
+    await axios
+      .get(`http://127.0.0.1:8000/api/project/material/${project}`)
+      .then((res) => {
+        const products = res.data.data.materials;
+        const cuveProducts = products.filter(
+          (product) => product.categorie_material_id === categorie_ma_cuve_id
+        );
+        if (cuveProducts.length > 0) {
+          const literCuve = cuveProducts[0].liter;
+          setLiter(literCuve);
+        }
+      });
   };
 
   useEffect(() => {
-    displayProjectProducts();
-    getCategorieLivings();
-  }, []); // Sans les crochets ça tourne en boucle
+    if (localStorage.getItem("onglet")) {
+      setSelectedProductType(localStorage.getItem("onglet"));
+    } else {
+      setSelectedProductType("material");
+    }
+    cuveLiter();
+    getCategorieCuve();
+    verifyProjectUser();
+  }, [categorie_ma_cuve_id]);
+  // console.log(liter);
 
   return (
     <>
       <MenuUser />
       <MenuAdmin />
-      <div className="pageViewProject">
-        <div className="addProductPageView">
-          <h1 className="titleViewProject">La population</h1>
-          {categorie_livings.map((categorie_living) => (
-            <div key={categorie_living.id}>
-              <div className="blocAddView">
-                <h2 className="titreCatViewProject">
-                  {categorie_living.name_categorie_living}
-                </h2>
-                <a
-                  className="btnAddProductView"
-                  href={
-                    "http://localhost:3000/projects/user/composition/projet/" +
-                    project +
-                    "/categorie_living/" +
-                    categorie_living.id
-                  }
-                >
-                  Ajouter
-                </a>
-              </div>
-
-              {projectProducts
-                .filter(
-                  (product) =>
-                    product.categorie_living_id === categorie_living.id
-                )
-                .map((product) => (
-                  <div className="blocProductView" key={product.id}>
-                    <button
-                      className="deleteProductView"
-                      onClick={() => deleteProduct(product.id)}
-                    >
-                      X
-                    </button>
-                    <div className="nameProductViewProject">
-                      {product.name_living}
-                    </div>
-                    <div className="lienProductWiki">i</div>
-                    <div className="blocViewQty">
-                      <button
-                        className="inputAjustQty"
-                        onClick={() =>
-                          handleDecreaseQty(product.id, product.living_quantity)
-                        }
-                      >
-                        -
-                      </button>
-                      <div className="qtyProductViewProject">
-                        {product.living_quantity}
-                      </div>
-                      <button
-                        className="inputAjustQty"
-                        onClick={() =>
-                          handleIncreaseQty(product.id, product.living_quantity)
-                        }
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-                ))}
-            </div>
-          ))}
+      <div className="tabCatProject">
+        <div
+          className={`tabTitleCatProject ${
+            selectedProductType === "material" ? "activeTabProduct" : ""
+          }`}
+          onClick={() => setSelectedProductType("material")}
+        >
+          Le matériel
         </div>
-        <div className="blocRightView">
-          <div className="instructionViewProject"></div>
-          {selectedProductType === "living" ? (
-            <button onClick={() => setSelectedProductType("material")}>
-              Matériels
-            </button>
-          ) : (
-            ""
-          )}
-          {selectedProductType === "material" ? (
-            <button onClick={() => setSelectedProductType("decoration")}>
-              Décorations
-            </button>
-          ) : (
-            ""
-          )}
-          {selectedProductType === "decoration" ? (
-            <button onClick={() => setSelectedProductType("living")}>
-              Vivants
-            </button>
-          ) : (
-            ""
-          )}
-          {/* <button className="btnSuiteView">Suite</button> */}
+        <div
+          className={`tabTitleCatProject ${
+            selectedProductType === "living" ? "activeTabProduct" : ""
+          }`}
+          onClick={() => setSelectedProductType("living")}
+        >
+          La population
+        </div>
+        <div
+          className={`tabTitleCatProject ${
+            selectedProductType === "decoration" ? "activeTabProduct" : ""
+          }`}
+          onClick={() => setSelectedProductType("decoration")}
+        >
+          La décoration
         </div>
       </div>
+
+      {selectedProductType === "material" && (
+        <Material categorie_ma_cuve_id={categorie_ma_cuve_id} />
+      )}
+      {selectedProductType === "living" && <Living liter={liter} />}
+      {selectedProductType === "decoration" && <Decoration />}
     </>
   );
 };
